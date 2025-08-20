@@ -1,116 +1,189 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página com Conteúdo Dinâmico</title>
-    <meta name="description" content="Conteúdo dinâmico carregado do Notion para título e vídeo.">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página com Conteúdo Dinâmico</title>
+    <meta name="description" content="Conteúdo dinâmico carregado do Notion.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="loading">
-    <main class="page-container">
-        <div class="content-wrapper">
-            <h1 id="notion-titulo">Carregando título...</h1>
+    
+    <section class="video-container">
+        <div class="video-responsive" id="notion-video-container">
+            </div>
+    </section>
+    
+    <section class="sobre-mim-section">
+        <div class="sobre-mim-content-wrapper">
+            <img id="sobre-mim-foto" class="sobre-mim-foto" src="src/bruna.JPEG" alt="Foto de Brunà Carvalho">
+            <h2>UM POUCO SOBRE MIM...</h2>
+            <div id="sobre-mim-texto" class="sobre-mim-texto">
+                </div>
+        </div>
+    </section>
 
-            <img id="page-image" src="https://via.placeholder.com/800x400?text=Sua+Imagem+Aqui" alt="Imagem de destaque" class="main-image">
+<footer class="rodape">
+        <div class="rodape-conteudo">
+            <p class="rodape-texto">Ainda ficou com alguma dúvida?</p>
+            <p class="rodape-texto">Vou adorar tirar todas com você! Me chama no whatsapp:</p>
+            <a href="https://api.whatsapp.com/send?phone=5531982431211&text=Ol%C3%A1,%20gostaria%20de%20tirar%20d%C3%BAvidas%20sobre%20a%20Forma%C3%A7%C3%A3o%20Social%20Media%20Gastron%C3%B4mico." target="_blank" class="whatsapp-btn">
+                CLICA AQUI PRA FALAR COMIGO
+            </a>
+        </div>
+    </footer>
 
-            <div class="video-responsive" id="notion-video-container">
-                </div>
-            
-            </div>
-    </main>
+    <script type="module">
+        const elements = {
+            videoContainer: document.getElementById("notion-video-container"),
+            sobreMimTexto: document.getElementById("sobre-mim-texto")
+        };
 
-    <script type="module">
-        const elements = {
-            titulo: document.getElementById("notion-titulo"),
-            videoContainer: document.getElementById("notion-video-container")
-        };
+        function removeLoadingClass() {
+            document.body.classList.remove('loading');
+        }
 
-        function removeLoadingClass() {
-            document.body.classList.remove('loading');
-        }
+        // Função para extrair texto completo do rich_text do Notion
+        function extractFullText(richTextArray) {
+            if (!richTextArray || !Array.isArray(richTextArray)) {
+                return '';
+            }
+            
+            return richTextArray
+                .map(item => item.plain_text || item.text?.content || '')
+                .join('')
+                .trim();
+        }
 
-        async function buscarConteudo() {
-            try {
-                const response = await fetch("/api/notion");
-                if (!response.ok) {
-                    throw new Error(`Erro na API: ${response.status}`);
-                }
-                const data = await response.json();
-                if (!data.results || data.results.length === 0) {
-                    throw new Error("Nenhum resultado encontrado na database do Notion.");
-                }
-                const page = data.results[0].properties;
+        // Função para processar rich_text com formatação completa do Notion
+        function processRichText(richTextArray) {
+            if (!richTextArray || !Array.isArray(richTextArray)) {
+                return '';
+            }
+            
+            return richTextArray.map(item => {
+                let text = item.plain_text || item.text?.content || '';
+                
+                if (!text) return '';
+                
+                // Processa quebras de linha
+                text = text.replace(/\n/g, '<br>');
+                
+                // Se não há anotações, retorna o texto simples
+                if (!item.annotations) {
+                    return text;
+                }
+                
+                const annotations = item.annotations;
+                let htmlText = text;
+                
+                // Aplica formatações
+                if (annotations.bold) {
+                    htmlText = `<strong>${htmlText}</strong>`;
+                }
+                
+                if (annotations.italic) {
+                    htmlText = `<em>${htmlText}</em>`;
+                }
+                
+                if (annotations.underline) {
+                    htmlText = `<u>${htmlText}</u>`;
+                }
+                
+                if (annotations.strikethrough) {
+                    htmlText = `<s>${htmlText}</s>`;
+                }
+                
+                if (annotations.code) {
+                    htmlText = `<code class="notion-inline-code">${htmlText}</code>`;
+                }
+                
+                // Aplica cores
+                if (annotations.color && annotations.color !== 'default') {
+                    const colorClass = `notion-${annotations.color}`;
+                    htmlText = `<span class="${colorClass}">${htmlText}</span>`;
+                }
+                
+                // Processa links
+                if (item.href) {
+                    htmlText = `<a href="${item.href}" target="_blank" rel="noopener noreferrer" class="notion-link">${htmlText}</a>`;
+                }
+                
+                return htmlText;
+            }).join('');
+        }
 
-                // 1. Atualizar o Título
-                if (elements.titulo && page.titulo_principal?.rich_text?.[0]?.plain_text) {
-                    elements.titulo.textContent = page.titulo_principal.rich_text[0].plain_text;
-                } else if (elements.titulo) {
-                    elements.titulo.textContent = "Título não encontrado no Notion ou vazio.";
-                }
+        async function buscarConteudo() {
+            try {
+                const response = await fetch("/api/notion");
+                if (!response.ok) {
+                    throw new Error(`Erro na API: ${response.status}`);
+                }
+                const data = await response.json();
+                if (!data.results || data.results.length === 0) {
+                    throw new Error("Nenhum resultado encontrado na database do Notion.");
+                }
+                const page = data.results[0].properties;
 
-                // 2. Atualizar o Vídeo Incorporado - Lógica atualizada para ConverteAI
-                let videoHtmlPart = '';
-                // Assume que video_embed_code agora contém APENAS o HTML (divs)
-                if (page.video_embed_code?.rich_text?.[0]?.plain_text) {
-                    videoHtmlPart = page.video_embed_code.rich_text[0].plain_text;
-                } else if (page.video_embed_code?.text?.content) {
-                    videoHtmlPart = page.video_embed_code.text.content;
-                }
+                // Processamento do vídeo
+                let videoHtmlPart = extractFullText(page.video_embed_code?.rich_text) || 
+                                   page.video_embed_code?.text?.content || '';
+                let videoScriptUrl = page.video_script_url?.url || 
+                                    extractFullText(page.video_script_url?.rich_text) || 
+                                    page.video_script_url?.text?.content || '';
 
-                let videoScriptUrl = '';
-                // Assume que video_script_url é uma nova propriedade do tipo URL/Text
-                if (page.video_script_url?.url) { // Se for tipo URL
-                    videoScriptUrl = page.video_script_url.url;
-                } else if (page.video_script_url?.rich_text?.[0]?.plain_text) { // Se for tipo Rich Text
-                    videoScriptUrl = page.video_script_url.rich_text[0].plain_text;
-                } else if (page.video_script_url?.text?.content) { // Se for tipo Text
-                    videoScriptUrl = page.video_script_url.text.content;
-                }
+                if (elements.videoContainer && videoHtmlPart) {
+                    elements.videoContainer.innerHTML = videoHtmlPart;
+                    if (videoScriptUrl) {
+                        const s = document.createElement("script");
+                        s.src = videoScriptUrl;
+                        s.async = true;
+                        document.body.appendChild(s);
+                    }
+                } else if (elements.videoContainer) {
+                    elements.videoContainer.innerHTML = "<p>Vídeo não disponível.</p>";
+                }
 
+                // Processamento do texto "Sobre Mim"
+                if (elements.sobreMimTexto) {
+                    let sobreMimTexto = '';
+                    
+                    // Tenta diferentes formas de acessar o texto com formatação completa
+                    if (page.sobre_mim_texto?.rich_text) {
+                        sobreMimTexto = processRichText(page.sobre_mim_texto.rich_text);
+                    } else if (page.sobre_mim?.rich_text) {
+                        sobreMimTexto = processRichText(page.sobre_mim.rich_text);
+                    } else if (page['sobre mim']?.rich_text) {
+                        sobreMimTexto = processRichText(page['sobre mim'].rich_text);
+                    }
+                    
+                    if (sobreMimTexto) {
+                        elements.sobreMimTexto.innerHTML = sobreMimTexto;
+                    } else {
+                        elements.sobreMimTexto.innerHTML = "<p>Texto 'Sobre Mim' não encontrado no Notion.</p>";
+                        // Debug: mostra as propriedades disponíveis
+                        console.log('Propriedades disponíveis:', Object.keys(page));
+                    }
+                }
+               
+            } catch (error) {
+                console.error("Erro ao buscar conteúdo do Notion:", error);
+                if (elements.sobreMimTexto) {
+                    elements.sobreMimTexto.innerHTML = "<p>Erro ao carregar o texto 'Sobre Mim'.</p>";
+                }
+                if (elements.videoContainer) {
+                    elements.videoContainer.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Vídeo de Exemplo - Fallback" frameborder="0" allowfullscreen></iframe>`;
+                }
+            } finally {
+                removeLoadingClass();
+            }
+        }
 
-                if (elements.videoContainer && videoHtmlPart) {
-                    // 1. Injeta a parte HTML (divs e imagem) no container
-                    elements.videoContainer.innerHTML = videoHtmlPart;
+        document.addEventListener('DOMContentLoaded', buscarConteudo);
+    </script>
 
-                    // 2. Cria e anexa o script dinamicamente para garantir que seja executado
-                    if (videoScriptUrl) {
-                        const s = document.createElement("script");
-                        s.src = videoScriptUrl;
-                        s.async = true;
-                        // Anexar ao body ou head para garantir execução
-                        document.body.appendChild(s); 
-                    } else {
-                        console.warn("URL do script do player ConverteAI não encontrada na propriedade 'video_script_url'.");
-                        elements.videoContainer.innerHTML = "<p>Erro: URL do script do vídeo não encontrada no Notion.</p>";
-                    }
-
-                } else if (elements.videoContainer) {
-                    console.warn("Código de incorporação HTML do vídeo não encontrado no Notion ou vazio.");
-                    elements.videoContainer.innerHTML = "<p>Vídeo não disponível.</p>";
-                }
-
-            } catch (error) {
-                console.error("Erro ao buscar conteúdo do Notion:", error);
-                if (elements.titulo) elements.titulo.textContent = "Erro ao carregar conteúdo.";
-                if (elements.videoContainer) {
-                    // Fallback para um iframe do YouTube se a API falhar ou não houver vídeo válido
-                    elements.videoContainer.innerHTML = `
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                        title="Vídeo de Exemplo - Fallback" frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>
-                    `;
-                }
-            } finally {
-                removeLoadingClass();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', buscarConteudo);
-    </script>
 </body>
 </html>

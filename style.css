@@ -1,63 +1,82 @@
-/* Estilos Básicos para o Body e Fontes */
-body {
-    font-family: 'Inter', sans-serif;
+/* Fontes Personalizadas para NeueMontreal */
+@font-face {
+    font-family: 'NeueMontreal';
+    src: url('./fonts/NeueMontreal-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NeueMontreal';
+    src: url('./fonts/NeueMontreal-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NeueMontreal';
+    src: url('./fonts/NeueMontreal-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NeueMontreal';
+    src: url('./fonts/NeueMontreal-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* Reset e Estilos Básicos */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5; /* Um fundo suave */
+    font-family: 'NeueMontreal', 'Inter', sans-serif;
+    background-image: linear-gradient(to right, #bed4c7, #3f4738);
     color: #333;
-    display: flex; /* Para centralizar o page-container */
-    justify-content: center;
-    align-items: flex-start; /* Alinha no topo, ajuste para 'center' se quiser centralizar verticalmente */
     min-height: 100vh;
-    overflow-x: hidden; /* Evita scroll horizontal indesejado */
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
-/* Estilos para o container principal da página */
-.page-container {
-    width: 100%;
-    max-width: 960px; /* Largura máxima para o conteúdo principal */
-    margin: 40px 20px; /* Margem superior/inferior e nas laterais */
-    padding: 30px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    box-sizing: border-box; /* Garante que padding não adicione à largura total */
-}
-
-/* Wrapper para o conteúdo (título, imagem, vídeo) */
-.content-wrapper {
+/* Container principal */
+main {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza horizontalmente o conteúdo */
-    text-align: center; /* Centraliza o texto */
-    gap: 30px; /* Espaçamento entre os elementos */
 }
 
-/* Estilos para o Título */
-#notion-titulo {
-    font-size: 2.8em; /* Ajuste o tamanho da fonte conforme preferir */
-    color: #2c3e50; /* Cor escura para o título */
-    margin: 0 0 10px 0; /* Remove margens padrão e adiciona espaçamento */
-    line-height: 1.2;
-}
-
-/* Estilos para a Imagem */
-.main-image {
-    max-width: 100%; /* Garante que a imagem não transborde */
-    height: auto; /* Mantém a proporção */
-    border-radius: 8px; /* Cantos levemente arredondados */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* Estilos para o Vídeo Responsivo (MUITO IMPORTANTE!) */
-.video-responsive {
+/* Seção de vídeo */
+.video-container {
     width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    background-color: #000; /* Fundo preto enquanto carrega ou se o vídeo não aparece */
-    /* Adicione um min-height ou um height padrão enquanto o conteúdo não carrega, se quiser */
-    min-height: 200px; /* Para evitar que o div "desapareça" antes de carregar o vídeo */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+/* Vídeo responsivo corrigido */
+.video-responsive {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 9/18; /* Proporção vertical para vídeos mobile */
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    background: #ffffff;
+    padding-top: 20px;
+}
+
 .video-responsive iframe {
     position: absolute;
     top: 0;
@@ -65,34 +84,334 @@ body {
     width: 100%;
     height: 100%;
     border: 0;
+    border-radius: 16px;
 }
 
-/* Estilos para o estado de carregamento (body.loading) */
-body.loading .page-container {
+/* Seção 'Sobre Mim' modernizada */
+.sobre-mim-section {
+    flex: 1;
+    width: 100%;
+    padding: 60px 20px;
+    background-image: linear-gradient(to right, #bed4c7, #3f4738);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de overlay sutil */
+.sobre-mim-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    pointer-events: none;
+}
+
+/* Container de conteúdo */
+.sobre-mim-content-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Foto com efeito */
+.sobre-mim-foto {
+    width: 350px;
+    height: 350px;
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    object-fit: cover;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); 
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.sobre-mim-foto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); /* Ajuste o hover */
+}
+
+.sobre-mim-foto:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 0 0 3px rgba(255, 255, 255, 0.2),
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Texto melhorado */
+.sobre-mim-texto {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.95);
+    white-space: pre-line;
+    max-width: 700px;
+    text-align: left;
+    margin: 0;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    font-weight: 300;
+}
+
+/* Estilos para formatação do Notion */
+
+/* Código inline */
+.notion-inline-code {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #ff6b6b;
+}
+
+/* Links do Notion */
+.notion-link {
+    color: #74b9ff;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.notion-link:hover {
+    color: #0984e3;
+    text-decoration: none;
+}
+
+/* Cores do texto do Notion */
+.notion-gray {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.notion-brown {
+    color: #d4a574 !important;
+}
+
+.notion-orange {
+    color: #ff9f43 !important;
+}
+
+.notion-yellow {
+    color: #feca57 !important;
+}
+
+.notion-green {
+    color: #5cb85c !important;
+}
+
+.notion-blue {
+    color: #74b9ff !important;
+}
+
+.notion-purple {
+    color: #a29bfe !important;
+}
+
+.notion-pink {
+    color: #fd79a8 !important;
+}
+
+.notion-red {
+    color: #e74c3c !important;
+}
+
+/* Cores de fundo do Notion */
+.notion-gray_background {
+    background-color: rgba(241, 241, 239, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-brown_background {
+    background-color: rgba(244, 238, 238, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-orange_background {
+    background-color: rgba(251, 236, 221, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-yellow_background {
+    background-color: rgba(251, 243, 219, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-green_background {
+    background-color: rgba(237, 243, 236, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-blue_background {
+    background-color: rgba(231, 243, 248, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-purple_background {
+    background-color: rgba(244, 240, 247, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-pink_background {
+    background-color: rgba(249, 238, 243, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.notion-red_background {
+    background-color: rgba(253, 235, 236, 0.2) !important;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+/* Estados de carregamento melhorados */
+body.loading {
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
 }
 
-body:not(.loading) .page-container {
+body:not(.loading) {
     opacity: 1;
+    transform: translateY(0);
 }
 
-/* Media Queries para responsividade em telas menores */
+/* Animações suaves */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.video-container, .sobre-mim-section {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.sobre-mim-section {
+    animation-delay: 0.2s;
+}
+
+/* Media Queries responsivas */
 @media (max-width: 768px) {
-    .page-container {
-        margin: 20px 15px;
-        padding: 20px;
+    .video-container {
+        padding: 30px 15px;
+        min-height: 50vh;
     }
-    #notion-titulo {
-        font-size: 2em;
+    
+    .video-responsive {
+        max-width: 350px;
     }
-    .content-wrapper {
-        gap: 20px;
+    
+    .sobre-mim-section {
+        padding: 40px 15px;
+    }
+    
+    .sobre-mim-foto {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .sobre-mim-texto {
+        font-size: 1rem;
+        padding: 25px;
+        text-align: center;
+    }
+    
+    .sobre-mim-content-wrapper {
+        max-width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    #notion-titulo {
-        font-size: 1.6em;
+    .video-container {
+        padding: 20px 10px;
     }
+    
+    .video-responsive {
+        max-width: 300px;
+    }
+    
+    .sobre-mim-section {
+        padding: 30px 10px;
+    }
+    
+    .sobre-mim-texto {
+        padding: 20px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Melhorias para acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Estado de foco melhorado */
+.sobre-mim-foto:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 5px;
+}
+
+/* Estilos para o Rodapé */
+.rodape {
+    background-color: #fd8e01; 
+    color: #333;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.rodape-conteudo {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.rodape-texto {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Estilos para o Botão do WhatsApp */
+.whatsapp-btn {
+    display: inline-block;
+    background-color: #25D366; /* Cor verde do WhatsApp */
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.whatsapp-btn:hover {
+    background-color: #128C7E; /* Verde mais escuro no hover */
+    transform: translateY(-2px);
 }
