@@ -36,11 +36,12 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'NeueMontreal', 'Inter', sans-serif;
-    background-image: linear-gradient(to right, #bed4c7, #3f4738);
+    background-image: linear-gradient(to right, #567663, #3f4738);
     color: #333;
-    min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
+    height: 100%;
+    
 }
 
 /* Container principal */
@@ -64,7 +65,6 @@ main {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Vídeo responsivo corrigido */
 .video-responsive {
     position: relative;
     width: 100%;
@@ -87,17 +87,16 @@ main {
     border-radius: 16px;
 }
 
-/* Seção 'Sobre Mim' modernizada */
 .sobre-mim-section {
-    flex: 1;
     width: 100%;
-    padding: 60px 20px;
-    background-image: linear-gradient(to right, #bed4c7, #3f4738);
+    padding: 60px 0px;
+    margin: 0; 
+    background-image: linear-gradient(to right, #567663, #3f4738);
     position: relative;
     overflow: hidden;
 }
 
-/* Efeito de overlay sutil */
+/* Efeito de overlay */
 .sobre-mim-section::before {
     content: '';
     position: absolute;
@@ -111,6 +110,7 @@ main {
 
 /* Container de conteúdo */
 .sobre-mim-content-wrapper {
+    color: #fffdf9;
     max-width: 900px;
     margin: 0 auto;
     display: flex;
@@ -148,7 +148,7 @@ main {
 
 /* Texto melhorado */
 .sobre-mim-texto {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1.8;
     color: rgba(255, 255, 255, 0.95);
     white-space: pre-line;
@@ -313,62 +313,60 @@ body:not(.loading) {
     animation-delay: 0.2s;
 }
 
-/* Media Queries responsivas */
-@media (max-width: 768px) {
+/* Media Queries para mobile */
+@media screen and (max-width: 768px) {
+
+    /* Altera o container do vídeo para ocupar a tela cheia */
+    .video-container.mobile-fullscreen {
+        padding: 0;
+        min-height: 100vh;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    /* Altera o container do player do vídeo para ocupar a tela cheia */
+    .video-container.mobile-fullscreen .video-responsive {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    /* Garante que o iframe ou player do vídeo também ocupe a tela cheia */
+    .video-container.mobile-fullscreen .video-responsive iframe,
+    .video-container.mobile-fullscreen .video-responsive vturb-smartplayer {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Regras do texto 'Sobre Mim' */
+    .sobre-mim-texto {
+        font-size: 1rem;
+        padding: 25px;
+        text-align: left; /* Garante que o alinhamento é para a esquerda */
+    }
+
+    /* Outras regras para telas menores */
     .video-container {
         padding: 30px 15px;
         min-height: 50vh;
     }
-    
+
     .video-responsive {
         max-width: 350px;
     }
-    
+
     .sobre-mim-section {
         padding: 40px 15px;
     }
-    
+
     .sobre-mim-foto {
         width: 350px;
         height: 350px;
     }
     
-    .sobre-mim-texto {
-        font-size: 1rem;
-        padding: 25px;
-        text-align: center;
-    }
-    
     .sobre-mim-content-wrapper {
         max-width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .video-container {
-        padding: 20px 10px;
-    }
-    
-    .video-responsive {
-        max-width: 300px;
-    }
-    
-    .sobre-mim-section {
-        padding: 30px 10px;
-    }
-    
-    .sobre-mim-texto {
-        padding: 20px;
-        font-size: 0.95rem;
-    }
-}
-
-/* Melhorias para acessibilidade */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
     }
 }
 
@@ -380,11 +378,14 @@ body:not(.loading) {
 
 /* Estilos para o Rodapé */
 .rodape {
-    background-color: #fd8e01; 
+   background-color: #fd8e01; 
     color: #333;
-    padding: 40px 20px;
+    padding: 40px 10px;
+    margin-top: 0;
+    margin-bottom: 0;
     text-align: center;
 }
+
 
 .rodape-conteudo {
     max-width: 800px;

@@ -1,14 +1,12 @@
 # Landing Page Solar com Notion CMS
 
-Uma landing page moderna e responsiva para empresas de energia solar, com integração ao Notion como CMS e formulários Netlify.
+Uma landing page moderna e responsiva para captura de leads utilizando vídeo incorporado da plataforma VTurb, com integração ao Notion como CMS.
 
 ## 🚀 Funcionalidades
 
 - **Design Responsivo**: Otimizado para todos os dispositivos
 - **CMS Notion**: Conteúdo dinâmico carregado via API do Notion
-- **Netlify Forms**: Sistema de captura de leads integrado
 - **Loading States**: Estados de carregamento elegantes
-- **Animações Suaves**: Transições e efeitos modernos
 - **SEO Otimizado**: Meta tags e estrutura semântica
 
 ## 📋 Configuração
@@ -27,10 +25,9 @@ VITE_NOTION_DATABASE_ID=seu_database_id_do_notion
 Crie uma database no Notion com as seguintes propriedades:
 
 - `slug` (Text) - Use "landing" para a página principal
-- `titulo_principal` (Title) - Título principal da página
-- `banner_url` (URL) - URL da imagem do banner
-- `descricao_titulo` (Text) - Título da seção de descrição
-- `descricao_texto` (Text) - Texto da descrição (suporta múltiplos parágrafos)
+- `video_embed_code` (Text) - Parte do código de incorporação do vturb
+- `video_script_url` (URL) - Parte do código de incorporação do vturb
+- `sobre_mim_texto` (Text) - Texto descritivo personalizado
 
 ### 3. Token do Notion
 
@@ -58,20 +55,12 @@ npm run dev
 npm run build
 ```
 
-## 📱 Funcionalidades do Formulário
-
-- Validação em tempo real
-- Estados de loading
-- Mensagem de sucesso
-- Integração automática com Netlify Forms
-- Campos otimizados para leads de energia solar
 
 ## 🎨 Personalização
 
 - Cores no arquivo `style.css` (variáveis CSS)
 - Conteúdo estático pode ser editado diretamente no HTML
 - Conteúdo dinâmico é gerenciado pelo Notion
-- Imagens podem ser alteradas via Notion ou substituídas por URLs do Pexels
 
 ## 📊 Estrutura do Projeto
 
@@ -84,11 +73,9 @@ npm run build
 
 ## 🌟 Recursos Incluídos
 
-- **Hero Section**: Com call-to-action principal
-- **Banner Dinâmico**: Imagem carregada do Notion
-- **Seção de Benefícios**: Cards com vantagens da energia solar
-- **Formulário de Lead**: Captura qualificada de interessados
-- **Footer Profissional**: Informações de contato
+- **Index principal**: Com vídeo incorporado do vturb via notion
+- **Seção de Quem sou eu**: vinda da database do notion
+- **Rodapé**: Botão de contato via whatsapp
 
 ## 🚀 Performance
 
